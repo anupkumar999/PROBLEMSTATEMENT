@@ -90,15 +90,55 @@ class Customer {
 
 
 public class Onlinestore {
-    public static void main (String []args){
-        //importing a scanner from a built in package  and taking a string input from the user 
-        Scanner scanner=new Scanner(System.in);
-        System.out.println("Enter the Name of the Customer: ");
-        //creating a customer class and a new object to customer name  which will store name
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter customer name: ");
         String customerName = scanner.nextLine();
         Customer customer = new Customer(customerName);
         Order order = new Order(customer);
 
-        
+        while (true) {
+            int choice = displayMenu(scanner);
+            switch (choice) {
+                case 1:
+                    addProductDetails(scanner, order);
+                    break;
+                case 2:
+                    double totalPrice = order.calculateTotal();
+                    double discountedPrice = order.applyDiscount();
+                    displayOrderSummary(totalPrice, discountedPrice);
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
     }
- }
+
+    public static int displayMenu(Scanner scanner) {
+        System.out.println("1. Add product details");
+        System.out.println("2. Calculate order summary and exit");
+        System.out.print("Enter your choice: ");
+        return scanner.nextInt();
+    }
+
+    public static void addProductDetails(Scanner scanner, Order order) {
+        scanner.nextLine(); // Consume the newline character
+        System.out.print("Product name: ");
+        String productName = scanner.nextLine();
+
+        System.out.print("Category: ");
+        String category = scanner.nextLine();
+
+        System.out.print("Price: ");
+        double price = scanner.nextDouble();
+
+        Product product = new Product(productName, category, price);
+        order.addProduct(product);
+    }
+
+    public static void displayOrderSummary(double totalPrice, double discountedPrice) {
+        System.out.println("Total price: " + totalPrice + "₹");
+        System.out.println("Discounted price: " + discountedPrice + "₹");
+    }
+}
